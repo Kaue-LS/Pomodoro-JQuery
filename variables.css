@@ -1,0 +1,41 @@
+:root {
+  --primary-color: #f4e7c1;
+  --secondary-color: #d9c9a3;
+  --third-color: #a67c52;
+  --fourth-color: #6e5b3d;
+  --fifth-color: #3e4a34;
+  --white-color: #ffffff;
+  --black-color: #000000;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Sancreek", serif;
+  font-weight: 400;
+  font-style: normal;
+  color: var(--fifth-color);
+}
+* {
+  font-family: "Merriweather Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+/* colors */
+.primary-color {
+  color: var(--primary-color);
+}
+.secondary-color {
+  color: var(--secondary-color);
+}
+.third-color {
+  color: var(--third-color);
+}
+.fourth-color {
+  color: var(--fourth-color);
+}
+.fifth-color {
+  color: var(--fifth-color);
+}

@@ -1,9 +1,9 @@
 :root {
-  --primary-color: #f4e7c1;
-  --secondary-color: #d9c9a3;
-  --third-color: #a67c52;
-  --fourth-color: #6e5b3d;
-  --fifth-color: #3e4a34;
+  --primary-color: #f2d3a4;
+  --secondary-color: #e4c08c;
+  --third-color: #e4c08c;
+  --fourth-color: #67230d;
+  --fifth-color: #473116;
   --white-color: #ffffff;
   --black-color: #000000;
 }
@@ -14,13 +14,13 @@ h4,
 h5,
 h6,
 input {
-  font-family: "Sancreek", serif;
+  font-family: 'Sancreek', serif;
   font-weight: 400;
   font-style: normal;
   color: var(--fifth-color);
 }
 * {
-  font-family: "Merriweather Sans", sans-serif;
+  font-family: 'Merriweather Sans', sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
 }
@@ -39,4 +39,19 @@ input {
 }
 .fifth-color {
   color: var(--fifth-color);
+}
+.border-styled {
+  border: 3px solid #8f6f46;
+  position: relative;
+
+  clip-path: polygon(
+    15px 0,
+    calc(100% - 15px) 0,
+    100% 15px,
+    100% calc(100% - 15px),
+    calc(100% - 15px) 100%,
+    15px 100%,
+    0 calc(100% - 15px),
+    0 15px
+  );
 }

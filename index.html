@@ -24,32 +24,67 @@
 
 <body>
     <header>
-        <h1>Pomodoro Timer</h1>
+        <div style="display: flex;">
+            <img src="./assets/vineta.png" alt="">
+            <h1>Pomodoro Timer</h1>
+            <img src="./assets/vineta.png" alt="">
+        </div>
+        <img src="./assets/arrown.png" alt="">
     </header>
 
-    <div class="container">
+    <div class="container border-styled">
         <main>
-            <div class="buttons">
+            <div class="buttons ">
                 <h2>Please select a timer</h2>
+                <label class="active" id="pomodoro">
+                    <span id="pomodoroIcon"></span>
+                    <button>Pomodoro</button>
+                </label>
+                <label id="short-break">
+                    <span id="shortBreakIcon"></span>
+                    <button>Short Break</button>
 
-                <button class="active" id="pomodoro">Pomodoro</button>
-                <button id="short-break">Short Break</button>
-                <button id="sessions">Sessions</button>
+                </label>
+                <label id="sessions">
+                    <span id="sessionIcon"></span>
+                    <button>Sessions</button>
 
-                <article>
-                    "The key is not to prioritize what's on your schedule, but to schedule your priorities. "<br>
-                    - Stephen Covey
+                </label>
+
+                <article class="border-styled">
+                    <p>"The key is not to prioritize what's on your schedule, but to schedule your priorities. "<br>
+                        - Stephen Covey
+                    </p>
                 </article>
             </div>
             <div class="timerDisplay">
                 <img class="pomodoro" src="./assets/pomodoro.png" alt="Pomodoro Timer" id="timerImage">
                 <input type="text" id="timerDisplay" value="25:00" readonly>
-                <div>
-                    <button id="plus">+</button>
+                <div class="configuration">
+                    <label id="plus" for="">
+                        <span id="plusIcon"></span>
+                        <button>MAX</button>
 
-                    <button id="minus">-</button>
-
-                    <button id="start-timer">Start Timer</button>
+                    </label>
+                    <label id="minus" for="">
+                        <span id="minusIcon"></span>
+                        <button>MIN</button>
+                    </label>
+                    <label id="start-timer" for="">
+                        <button>Start Timer</button>
+                    </label>
+                </div>
+                <div class="control">
+                    control
+                    <label for="">
+                        <button>MAX</button>
+                    </label>
+                    <label for="">
+                        <button>MIN</button>
+                    </label>
+                    <label for="">
+                        <button>Start Timer</button>
+                    </label>
                 </div>
             </div>
 
@@ -65,21 +100,29 @@
                     <p id="Description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                 </div>
                 <div>
-                    <label for="cycles">Cycles:</label>
-                    <input name="cycles" type="number" value="0">
+                    <label for="cycles">Cycles:
+                        <input name="cycles" type="number" value="0">
+
+                    </label>
                 </div>
                 <div>
-                    <label for="cycles">Total Focus Time:</label>
-                    <input name="cycles" type="number" value="0">
-                    <span>min</span>
+                    <label for="cycles">Total Focus Time:
+                        <input name="cycles" type="number" value="0">
+                        <span>min</span>
+
+                    </label>
                 </div>
                 <div>
-                    <label for="cycles">NextBreak:</label>
-                    <input name="cycles" type="number" value="5">
+                    <label for="cycles">NextBreak:
+                        <input name="cycles" type="number" value="5">
+
+                    </label>
                 </div>
                 <div>
-                    <label for="cycles">Completed Today:</label>
-                    <input name="cycles" type="number" value="3">
+                    <label for="cycles">Completed Today:
+                        <input name="cycles" type="number" value="3">
+
+                    </label>
                     <span>sessions</span>
                 </div>
             </article>

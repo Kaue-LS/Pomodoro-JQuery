@@ -4,8 +4,7 @@ $(document).ready(function () {
     var seconds = 0
     var sessions = 2
     var type = 'pomodoro'
-    console.log(type)
-
+    var started = false
     // UPDATE TIMER
     function updateTimer(timer) {
         if (type == 'session' && (timer >= 0 || timer <= 4)) {
@@ -31,7 +30,6 @@ $(document).ready(function () {
         }
     }
     function updateInput(minutes) {
-        console.log("teste")
         if (type == 'session') {
             if (minutes < 0) {
                 return 0
@@ -45,7 +43,6 @@ $(document).ready(function () {
         else {
             if (type == 'pomodoro' || type == 'shortBreak') {
                 if (minutes >= 0 && minutes <= 9) {
-                    console.log("0" + minutes)
                     return "0" + minutes
                 }
                 if (minutes < 0) {
@@ -63,13 +60,23 @@ $(document).ready(function () {
     }
 
 
-    // 
+    // DEFAULT VALUES AND IMAGES
     $("#timerDisplay").val(updateInput(pomodoroTime) + ":" + updateSeconds(seconds));
+    $("#pomodoroIcon").append("<img src='./assets/watch-2.png' alt='pomodoro'/>");
+    $("#shortBreakIcon").append("<img src='./assets/coffe.png' alt='pomodoro'/>");
+    $("#sessionIcon").append("<img src='./assets/couch-2.png' alt='pomodoro'/>");
+
+    $("#plusIcon").append("<img src='./assets/plus.png' alt='pomodoro'/>");
+    $("#minusIcon").append("<img src='./assets/minus.png' alt='pomodoro'/>");
 
 
-    // 
+    let displayControl = started ? "block" : 'none';
+    $(".control").css('display', displayControl)
+
+
+
+    // PLUS and MINUS button
     $("#plus").click(function () {
-        console.log(type)
         if (type == 'session') {
             sessions++
             return $("#timerDisplay").val(updateInput(sessions));
@@ -87,7 +94,6 @@ $(document).ready(function () {
         }
     })
     $("#minus").click(function () {
-        console.log(type)
         if (type == 'session') {
             sessions--
             return $("#timerDisplay").val(updateInput(sessions));
@@ -122,7 +128,7 @@ $(document).ready(function () {
         $("#timerInfo #Description").text("Focus on your work for 25 minutes.");
         type = "pomodoro";
         updateTimer(pomodoroTime)
-
+        personalizeButton(type)
 
     });
     $("#short-break").click(function () {
@@ -132,7 +138,9 @@ $(document).ready(function () {
         $("#timerInfo #Title").text("Short Break");
         $("#timerInfo #Description").text("Take a short break for 5 minutes.");
         type = 'shortBreak'
+        console.log(type)
         updateTimer(shortBreakTime)
+        personalizeButton(type)
 
     });
     $("#sessions").click(function () {
@@ -140,9 +148,9 @@ $(document).ready(function () {
         $("#pomodoro").removeClass("active");
         $("#short-break").removeClass("active");
         $("#timerInfo #Title").text("Long Break");
-        console.log("sessions break")
         type = 'session'
         updateTimer(sessions)
+        personalizeButton(type)
     });
 
 
@@ -152,7 +160,39 @@ $(document).ready(function () {
         if (pomodoroTime == 0 || shortBreakTime == 0 && session == 0) {
             alert("Error, please check the timer")
         } else {
+            // started = !started
             startPomodoro()
         }
     })
+
+
+    // ADD ICONS on default and hove button
+    function personalizeButton(type) {
+        let watchSrc = (type === "pomodoro") ? './assets/watch-2.png' : './assets/watch.png';
+        let coffeSrc = (type === "shortBreak") ? './assets/coffe-2.png' : './assets/coffe.png';
+        let sessionSrc = (type === "session") ? './assets/couch.png' : './assets/couch-2.png';
+
+        $("#pomodoroIcon img").attr("src", watchSrc);
+        $("#shortBreakIcon img").attr("src", coffeSrc);
+        $("#sessionIcon img").attr("src", sessionSrc);
+
+
+    }
+
+    // APP HOVER ON BUTTONS
+    $('#plus').hover(function () {
+        $(`#plusIcon img`).attr('src', "./assets/plus-2.png")
+    },
+        function () {
+            $(`#plusIcon img`).attr('src', "./assets/plus.png")
+
+        })
+
+    $('#minus').hover(function () {
+        $(`#minusIcon img`).attr('src', "./assets/minus-2.png")
+    },
+        function () {
+            $(`#minusIcon img`).attr('src', "./assets/minus.png")
+
+        })
 });

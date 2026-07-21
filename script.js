@@ -5,6 +5,10 @@ $(document).ready(function () {
     var sessions = 2
     var type = 'pomodoro'
     var started = false
+
+
+
+
     // UPDATE TIMER
     function updateTimer(timer) {
         if (type == 'session' && (timer >= 0 || timer <= 4)) {
@@ -104,9 +108,16 @@ $(document).ready(function () {
 
 
     $("#totalFocus").val(pomodoroTime * sessions)
+    $("#cycles").val(sessions)
     $("#nextBreak").val(pomodoroTime)
+
+    $("#timerInfo #Description").text(`Focus on your work for ${pomodoroTime} minutes.`);
+
+
+
     let displayControl = started ? "block" : 'none';
     $(".control").css('display', displayControl)
+    $("#completedTask").css("display", displayControl)
 
 
 
@@ -115,11 +126,15 @@ $(document).ready(function () {
         if (type == 'session') {
             sessions++
             $("#timerDisplay").val(updateInput(sessions));
+            $("#cycles").val(sessions)
+
             updateTotalFocus()
 
         }
         if (type == "pomodoro") {
             pomodoroTime++
+            $("#timerInfo #Description").text(`Focus on your work for ${pomodoroTime} minutes.`);
+
             $("#timerDisplay").val(updateInput(pomodoroTime) + ":" + updateSeconds(seconds));
             updateTotalFocus()
 
@@ -135,11 +150,15 @@ $(document).ready(function () {
         if (type == 'session') {
             sessions--
             $("#timerDisplay").val(updateInput(sessions));
+            $("#cycles").val(sessions)
+
             updateTotalFocus();
 
         }
         if (type == "pomodoro") {
             pomodoroTime--
+            $("#timerInfo #Description").text(`Focus on your work for ${pomodoroTime} minutes.`);
+
             $("#timerDisplay").val(updateInput(pomodoroTime) + ":" + updateSeconds(seconds));
             updateTotalFocus()
         }
@@ -199,8 +218,14 @@ $(document).ready(function () {
         if (pomodoroTime == 0 || shortBreakTime == 0 && session == 0) {
             alert("Error, please check the timer")
         } else {
+            console.log({
+                "pomodoro": pomodoroTime,
+                "shortBreak": shortBreakTime,
+                "sessions": sessions,
+            })
+
             // started = !started
-            startPomodoro()
+            // startPomodoro()
         }
     })
 

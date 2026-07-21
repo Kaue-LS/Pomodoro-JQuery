@@ -23,7 +23,7 @@ $(document).ready(function () {
     }
     function updateSeconds(seconds) {
         if (seconds >= 0 && seconds <= 10) {
-            return seconds + "0"
+            return "0" + seconds
         }
         else {
             return seconds
@@ -31,24 +31,46 @@ $(document).ready(function () {
     }
     function updateInput(minutes) {
         if (type == 'session') {
-            if (minutes < 0) {
-                return 0
+            if (minutes < 1) {
+                sessions = 1
+                return 1
             }
             if (minutes > 4) {
+                sessions = 4
                 return 4
             }
             return minutes
 
         }
         else {
-            if (type == 'pomodoro' || type == 'shortBreak') {
+            if (type == 'pomodoro') {
                 if (minutes >= 0 && minutes <= 9) {
+                    pomodoroTime = minutes
                     return "0" + minutes
                 }
                 if (minutes < 0) {
+                    pomodoroTime = 0
                     return "0" + 0
                 }
                 if (minutes > 60) {
+                    pomodoroTime = 60
+                    return 60
+                }
+                else {
+                    return minutes
+                }
+            }
+            if (type == "shortBreak") {
+                if (minutes >= 0 && minutes <= 9) {
+                    shortBreakTime = minutes
+                    return "0" + minutes
+                }
+                if (minutes < 0) {
+                    shortBreakTime = 0
+                    return "0" + 0
+                }
+                if (minutes > 60) {
+                    shortBreakTime = 60
                     return 60
                 }
                 else {
@@ -60,6 +82,17 @@ $(document).ready(function () {
     }
 
 
+    function updateTotalFocus() {
+        if (
+            sessions >= 1 &&
+            sessions <= 4 &&
+            pomodoroTime >= 0 &&
+            pomodoroTime <= 60
+        ) {
+            $("#totalFocus").val(pomodoroTime * sessions);
+        }
+    }
+
     // DEFAULT VALUES AND IMAGES
     $("#timerDisplay").val(updateInput(pomodoroTime) + ":" + updateSeconds(seconds));
     $("#pomodoroIcon").append("<img src='./assets/watch-2.png' alt='pomodoro'/>");
@@ -70,6 +103,8 @@ $(document).ready(function () {
     $("#minusIcon").append("<img src='./assets/minus.png' alt='pomodoro'/>");
 
 
+    $("#totalFocus").val(pomodoroTime * sessions)
+    $("#nextBreak").val(pomodoroTime)
     let displayControl = started ? "block" : 'none';
     $(".control").css('display', displayControl)
 
@@ -79,12 +114,14 @@ $(document).ready(function () {
     $("#plus").click(function () {
         if (type == 'session') {
             sessions++
-            return $("#timerDisplay").val(updateInput(sessions));
+            $("#timerDisplay").val(updateInput(sessions));
+            updateTotalFocus()
 
         }
         if (type == "pomodoro") {
             pomodoroTime++
             $("#timerDisplay").val(updateInput(pomodoroTime) + ":" + updateSeconds(seconds));
+            updateTotalFocus()
 
         }
         if (type == "shortBreak") {
@@ -92,17 +129,19 @@ $(document).ready(function () {
             $("#timerDisplay").val(updateInput(shortBreakTime) + ":" + updateSeconds(seconds));
 
         }
+
     })
     $("#minus").click(function () {
         if (type == 'session') {
             sessions--
-            return $("#timerDisplay").val(updateInput(sessions));
+            $("#timerDisplay").val(updateInput(sessions));
+            updateTotalFocus();
 
         }
         if (type == "pomodoro") {
             pomodoroTime--
             $("#timerDisplay").val(updateInput(pomodoroTime) + ":" + updateSeconds(seconds));
-
+            updateTotalFocus()
         }
         if (type == "shortBreak") {
             shortBreakTime--
@@ -195,4 +234,7 @@ $(document).ready(function () {
             $(`#minusIcon img`).attr('src', "./assets/minus.png")
 
         })
+
+
+
 });

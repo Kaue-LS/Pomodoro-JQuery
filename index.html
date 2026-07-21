@@ -100,27 +100,28 @@
                     <p id="Description">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                 </div>
                 <div>
-                    <label for="cycles">Cycles:
-                        <input name="cycles" type="number" value="0">
+                    <label class="cycles" for="cycles">Cycles:
+                        <input name="cycles" max="4" min="1" id="cycles" type="number" value="0">
 
                     </label>
                 </div>
                 <div>
-                    <label for="cycles">Total Focus Time:
-                        <input name="cycles" type="number" value="0">
+                    <label for="cycles">
+                        Total Focus Time:
+                        <input id="totalFocus" name="cycles" type="text" value="0" readonly>
                         <span>min</span>
 
                     </label>
                 </div>
                 <div>
                     <label for="cycles">NextBreak:
-                        <input name="cycles" type="number" value="5">
+                        <input id="nextBreak" name="cycles" type="text" value="" readonly>
 
                     </label>
                 </div>
                 <div>
                     <label for="cycles">Completed Today:
-                        <input name="cycles" type="number" value="3">
+                        <input name="cycles" type="text" value="3" readonly>
 
                     </label>
                     <span>sessions</span>

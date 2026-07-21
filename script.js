@@ -1,10 +1,10 @@
 $(document).ready(function () {
     var defaultPomodoro = 25;
     var defaultShortBreak = 5;
-
     var pomodoroTime = defaultPomodoro;
     var shortBreakTime = defaultShortBreak;
-    var seconds = 0
+    var pomodoroSeconds = 0
+    var shortBreakSeconds = 0
     var sessions = 2;
     var currentSession = 2;
     var type = 'pomodoro'
@@ -21,12 +21,12 @@ $(document).ready(function () {
             return
         }
         if (type == 'pomodoro') {
-            $("#timerDisplay").val(updateInput(pomodoroTime) + ":" + updateSeconds(seconds));
+            $("#timerDisplay").val(updateInput(pomodoroTime) + ":" + updateSeconds(pomodoroSeconds));
             return
         }
         if (type == 'shortBreak') {
 
-            $("#timerDisplay").val(updateInput(shortBreakTime) + ":" + updateSeconds(seconds));
+            $("#timerDisplay").val(updateInput(shortBreakTime) + ":" + updateSeconds(shortBreakSeconds));
             return
         }
     }
@@ -103,7 +103,7 @@ $(document).ready(function () {
     }
 
     // DEFAULT VALUES AND IMAGES
-    $("#timerDisplay").val(updateInput(pomodoroTime) + ":" + updateSeconds(seconds));
+    $("#timerDisplay").val(updateInput(pomodoroTime) + ":" + updateSeconds(pomodoroSeconds));
     $("#pomodoroIcon").append("<img src='./assets/watch-2.png' alt='pomodoro'/>");
     $("#shortBreakIcon").append("<img src='./assets/coffe.png' alt='pomodoro'/>");
     $("#sessionIcon").append("<img src='./assets/couch-2.png' alt='pomodoro'/>");
@@ -140,13 +140,13 @@ $(document).ready(function () {
             pomodoroTime++
             $("#timerInfo #Description").text(`Focus on your work for ${pomodoroTime} minutes.`);
 
-            $("#timerDisplay").val(updateInput(pomodoroTime) + ":" + updateSeconds(seconds));
+            $("#timerDisplay").val(updateInput(pomodoroTime) + ":" + updateSeconds(pomodoroSeconds));
             updateTotalFocus()
 
         }
         if (type == "shortBreak") {
             shortBreakTime++
-            $("#timerDisplay").val(updateInput(shortBreakTime) + ":" + updateSeconds(seconds));
+            $("#timerDisplay").val(updateInput(shortBreakTime) + ":" + updateSeconds(shortBreakSeconds));
 
         }
 
@@ -164,12 +164,12 @@ $(document).ready(function () {
             pomodoroTime--
             $("#timerInfo #Description").text(`Focus on your work for ${pomodoroTime} minutes.`);
 
-            $("#timerDisplay").val(updateInput(pomodoroTime) + ":" + updateSeconds(seconds));
+            $("#timerDisplay").val(updateInput(pomodoroTime) + ":" + updateSeconds(pomodoroSeconds));
             updateTotalFocus()
         }
         if (type == "shortBreak") {
             shortBreakTime--
-            $("#timerDisplay").val(updateInput(shortBreakTime) + ":" + updateSeconds(seconds));
+            $("#timerDisplay").val(updateInput(shortBreakTime) + ":" + updateSeconds(shortBreakSeconds));
 
         }
     })
@@ -268,7 +268,7 @@ $(document).ready(function () {
 
     // MAKE THE COUNTDOWN
     function countDown() {
-        if (seconds === 0) {
+        if (pomodoroSeconds === 0) {
             if (type === "pomodoro") {
                 if (pomodoroTime === 0) {
                     nextStep();
@@ -276,20 +276,23 @@ $(document).ready(function () {
                 }
 
                 pomodoroTime--;
-                seconds = 59;
+                pomodoroSeconds = 59;
             }
 
-            if (type === "shortBreak") {
+
+        } else {
+            pomodoroSeconds--;
+        }
+        if (shortBreakSeconds == 0) {
+            if (type === "shortBreak" && pomodoroTime == 0) {
                 if (shortBreakTime === 0) {
                     nextStep();
                     return;
                 }
 
                 shortBreakTime--;
-                seconds = 59;
+                shortBreakSeconds = 59;
             }
-        } else {
-            seconds--;
         }
 
         updateTimer();
@@ -310,7 +313,7 @@ $(document).ready(function () {
 
             updateInputShortBreak();
 
-            seconds = 0;
+            pomodoroSeconds = 0;
             shortBreakTime = defaultShortBreak;
 
             updateTimer();
@@ -323,7 +326,7 @@ $(document).ready(function () {
 
             updateInputPomodoro();
 
-            seconds = 0;
+            shortBreakSeconds = 0;
             pomodoroTime = defaultPomodoro;
 
             updateTimer();
@@ -341,7 +344,8 @@ $(document).ready(function () {
         pomodoroTime = 25;
         shortBreakTime = 5;
         sessions = 2;
-        seconds = 0;
+        pomodoroSeconds = 0;
+        shortBreakSeconds = 0;
         updateInputPomodoro()
 
         updateTimer();
@@ -353,15 +357,36 @@ $(document).ready(function () {
         if (type != "pomodoro") {
             updateInputPomodoro()
         }
-
+        $("#completedTask input").val(currentSession / sessions)
         $(".control").css('display', "flex")
+        $(".configuration").css('display', "none")
         $("#completedTask").css("display", "block")
         currentSession = 1;
         defaultPomodoro = pomodoroTime
         defaultShortBreak = shortBreakTime
-        // shortBreakTime = 0
-        // pomodoroTime = 0
         interval = setInterval(countDown, 1000);
     }
 
+    $("#pause").click(function () {
+        clearInterval(interval)
+        interval = null;
+    })
+    $("#play").click(function () {
+        interval = setInterval(countDown, 1000);
+    })
+    $("#repeat").click(function () {
+        clearInterval(interval)
+        interval = null;
+        if (type === 'pomodoro') {
+            pomodoroTime = defaultPomodoro
+            pomodoroSeconds = 0
+            updateInputPomodoro()
+        } else {
+            shortBreakTime = defaultShortBreak
+            shortBreakSeconds = 0
+            updateInputShortBreak()
+        }
+        interval = setInterval(countDown, 1000);
+
+    })
 });

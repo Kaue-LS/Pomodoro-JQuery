@@ -1,10 +1,15 @@
 $(document).ready(function () {
-    var pomodoroTime = 25
-    var shortBreakTime = 5
+    var defaultPomodoro = 25;
+    var defaultShortBreak = 5;
+
+    var pomodoroTime = defaultPomodoro;
+    var shortBreakTime = defaultShortBreak;
     var seconds = 0
-    var sessions = 2
+    var sessions = 2;
+    var currentSession = 2;
     var type = 'pomodoro'
     var started = false
+    var interval = null;
 
 
 
@@ -174,12 +179,8 @@ $(document).ready(function () {
 
 
 
-
-
-    // UPDATE CLASS AND INPUT
-    $("#pomodoro").click(function () {
-
-        $(this).addClass("active" || "");
+    function updateInputPomodoro() {
+        $("#pomodoro").addClass("active" || "");
         $("#short-break").removeClass("active");
         $("#sessions").removeClass("active");
         $("#timerInfo #Title").text("Pomodoro");
@@ -187,9 +188,8 @@ $(document).ready(function () {
         type = "pomodoro";
         updateTimer(pomodoroTime)
         personalizeButton(type)
-
-    });
-    $("#short-break").click(function () {
+    }
+    function updateInputShortBreak() {
         $("#pomodoro").removeClass("active");
         $("#sessions").removeClass("active");
         $(this).addClass("active" || "");
@@ -199,9 +199,8 @@ $(document).ready(function () {
         console.log(type)
         updateTimer(shortBreakTime)
         personalizeButton(type)
-
-    });
-    $("#sessions").click(function () {
+    }
+    function updateInputSession() {
         $(this).addClass("active" || "");
         $("#pomodoro").removeClass("active");
         $("#short-break").removeClass("active");
@@ -209,25 +208,18 @@ $(document).ready(function () {
         type = 'session'
         updateTimer(sessions)
         personalizeButton(type)
+    }
+
+    // UPDATE CLASS AND INPUT
+    $("#pomodoro").click(function () {
+        updateInputPomodoro(this)
     });
-
-
-
-    // CHECK BEFORE START
-    $("#start-timer").click(function () {
-        if (pomodoroTime == 0 || shortBreakTime == 0 && session == 0) {
-            alert("Error, please check the timer")
-        } else {
-            console.log({
-                "pomodoro": pomodoroTime,
-                "shortBreak": shortBreakTime,
-                "sessions": sessions,
-            })
-
-            // started = !started
-            // startPomodoro()
-        }
-    })
+    $("#short-break").click(function () {
+        updateInputShortBreak()
+    });
+    $("#sessions").click(function () {
+        updateInputSession()
+    });
 
 
     // ADD ICONS on default and hove button
@@ -261,5 +253,115 @@ $(document).ready(function () {
         })
 
 
+
+    // CHECK BEFORE START
+    $("#start-timer").click(function () {
+        if (pomodoroTime == 0 || shortBreakTime == 0 && sessions == 0) {
+            alert("Error, please check the timer")
+        } else {
+
+            started = !started
+            startPomodoro()
+        }
+    })
+
+
+    // MAKE THE COUNTDOWN
+    function countDown() {
+        if (seconds === 0) {
+            if (type === "pomodoro") {
+                if (pomodoroTime === 0) {
+                    nextStep();
+                    return;
+                }
+
+                pomodoroTime--;
+                seconds = 59;
+            }
+
+            if (type === "shortBreak") {
+                if (shortBreakTime === 0) {
+                    nextStep();
+                    return;
+                }
+
+                shortBreakTime--;
+                seconds = 59;
+            }
+        } else {
+            seconds--;
+        }
+
+        updateTimer();
+    }
+
+    function nextStep() {
+        if (type === "pomodoro") {
+
+            if (currentSession >= sessions) {
+                clearInterval(interval);
+                interval = null;
+
+                alert("Pomodoro finalizado!");
+                resetPomodoro()
+                started = false
+                return;
+            }
+
+            updateInputShortBreak();
+
+            seconds = 0;
+            shortBreakTime = defaultShortBreak;
+
+            updateTimer();
+            return;
+        }
+
+        if (type === "shortBreak") {
+
+            currentSession++;
+
+            updateInputPomodoro();
+
+            seconds = 0;
+            pomodoroTime = defaultPomodoro;
+
+            updateTimer();
+        }
+    }
+    function pausePomodoro() {
+        clearInterval(interval);
+        interval = null;
+    }
+
+    function resetPomodoro() {
+        clearInterval(interval);
+        interval = null;
+
+        pomodoroTime = 25;
+        shortBreakTime = 5;
+        sessions = 2;
+        seconds = 0;
+        updateInputPomodoro()
+
+        updateTimer();
+    }
+
+    // START POMODORO
+    function startPomodoro() {
+        if (interval) return; // i
+        if (type != "pomodoro") {
+            updateInputPomodoro()
+        }
+
+        $(".control").css('display', "flex")
+        $("#completedTask").css("display", "block")
+        currentSession = 1;
+        defaultPomodoro = pomodoroTime
+        defaultShortBreak = shortBreakTime
+        // shortBreakTime = 0
+        // pomodoroTime = 0
+        interval = setInterval(countDown, 1000);
+    }
 
 });
